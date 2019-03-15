@@ -1,0 +1,21 @@
+node('<hostname>') {
+
+// try catch block with stages
+try {
+      stage("Chekout codebase") {
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '<Credential-ID>', url: 'https://github.com/suhasbagade/mkdocs-samplesite-docker.git']]])
+      }
+      stage("Build Docker image") {
+        sh '''cd docker
+              docker build . -t mkdocs-samplesite-docker'''  
+      }
+      stage("Test App") {
+          exit_status = sh returnStatus: true, script: 'curl http://localhost:8000'
+          if (exit_status != 0) {
+            return
+          }
+      }  
+ } catch (error) {
+    throw error 
+   } 
+}

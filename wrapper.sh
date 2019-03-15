@@ -5,6 +5,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
+# Help function
 display_help() {
 
 	echo -e "$GREEN Usage: $0 [arg]">&2
@@ -64,13 +65,14 @@ do
     esac
 done
 
+# Check whether arguments are not null
 if [[ $path = "" ]] || [[ $action = "" ]]; then
 	echo -e "\n $RED one of the argument is null $NC \n"
 	display_help
 	exit;
 fi
 
-
+# Main segment which spins up the mkdocs container and serve the webpage on browser.
 echo -e "\n $GREEN Computing properties to produce site $NC \n"
 dir_mkdoc_config=`dirname $path`
 file_name_tar_gz=`basename $path`
